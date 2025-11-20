@@ -14,11 +14,11 @@ Features:
 
  ## Setup
 
- Install pepentation by cloning it to folder `{data-dir}/typst/packages/local/pepentation/0.0.1` where `{cache-dir}` is
+ Install pepentation by cloning it to folder `{data-dir}/typst/packages/local/pepentation/0.0.1` where `{data-dir}` is
 
-- `$XDG_CACHE_HOME` or `~/.cache` on Linux
-- `~/Library/Caches` on macOS
-- `%LOCALAPPDATA%` on Windows
+- `$XDG_DATA_HOME` or `~/.local/share` on Linux
+- `~/Library/Application Support` on macOS
+- `%APPDATA%` on Windows
 
 After that the package can be imported with `#import "@local/pepentation:0.0.1": *`. 
 
@@ -57,6 +57,14 @@ Then, insert your content.
 #lorem(20)
 ```
 
+## Additional functionality
+
+Provides blocks to highlight some informative part of the presentation:
+- ```#defenition[content]```
+- ```#warning[content]```
+- ```#remark[content]```
+- ```#hint[content]```
+
 ## Options
 
 All available Options to initialize the template with
@@ -80,7 +88,7 @@ All available Options to initialize the template with
 | *theme.secondary*       | Secondary color of presentation                                | `rgb("#00649F")` |
 | *theme.main-text*       | Color of content's text.                                       | `rgb("#00649F")` |
 | *theme.sub-text*        | Color of text used in places like header, footer, etc.         | `rgb("#00649F")` |
-| *theme.background       | Background color of presentation                               | `rgb("#00649F")` |
+| *theme.background*      | Background color of presentation                               | `rgb("#00649F")` |
 | *table-of-content*      | Wheather to show table of content or not                       | `false`          |
 | *header*                | Wheather to show header or not                                 | `true`           |
 | *locale*                | Language of presentation. Only "EN" and "RU" supported for now | `"EN"`           |

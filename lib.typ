@@ -217,12 +217,12 @@
               #v(-0.1em)
               #grid(
                 columns: 2, 
-                align: (center+horizon, right+horizon),
-                box(width: 100%, height: 100%)[#align(horizon, text(fill: theme.sub-text)[#footer.date])],
-                box(width: 100%, height: 100%)[
+                align: (left+horizon, right+horizon),
+                box(width: 100%, height: 100%)[~#text(fill: theme.sub-text)[#footer.date]],
+                box(width: 10%, height: 100%)[
                   #align(horizon, text(fill: theme.sub-text)[
                     #v(-0.1em)
-                    #counter(page).display("1/1", both: true); 
+                    #counter(page).display("1/1", both: true);
                   ])
                 ])
               ],
@@ -281,6 +281,7 @@
 
       set align(center)
       text(size: 2.2em)[
+        #v(0.2em)
         #{
           (
             (locale == "EN", [*Table of contents*]),
@@ -288,7 +289,7 @@
           ).find(t => t.at(0)).at(1)
         }
       ]
-      columns(2, outline(title: none))
+      columns(2, outline(depth: 2, title: none))
     }
 
     //Section slide
@@ -319,5 +320,63 @@
       )
     }
 
+    // Main slide
+    show heading.where(level: 3): x => {
+      pagebreak(weak: true)
+      set align(center)
+      set text(size: 20pt)
+      box(
+        inset: 0.2em,
+        text(weight: "bold")[#x.body],
+      )
+    }
+
     content
   }
+
+#show raw.where(block: false): box.with(
+  fill: luma(240),
+  inset: (x: 3pt, y: 0pt),
+  outset: (y: 3pt),
+  radius: 5pt,
+)
+
+#set par(first-line-indent: (amount: 1em, all: true), justify: true)
+
+
+#let pepentation_block(col: gray, raw_col: none, content) = {
+  if raw_col == none {
+    raw_col = col
+  }
+
+  show raw.where(block: false): it => box(
+    fill: luma(240).rgb().mix(raw_col),
+    inset: (x: 3pt, y: 0pt),
+    outset: (y: 3pt),
+    radius: 5pt,
+    it.text
+  )
+
+  box(
+    fill: col.transparentize(80%),
+    radius: 1em,
+    outset: 0.5em,
+    text[#content]
+  )
+}
+
+#let defenition(content) = {
+  pepentation_block[#content]
+}
+
+#let warning(content) = {
+  pepentation_block(col: red)[#content]
+}
+
+#let remark(content) = {
+  pepentation_block(col: orange)[#content]
+}
+
+#let hint(content) = {
+  pepentation_block(col: green)[#content]
+}

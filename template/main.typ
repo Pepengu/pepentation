@@ -27,6 +27,32 @@
 //If no title is provided it will not be shown in table of content
 ==
 
-= Another Section
+= Math
 
-== Another Slide
+== Greatest common divisor
+
+#defenition[
+  *Definition – Euclid's algorithm*
+
+  The function `gcd(a, b)` returns the greatest common divisor of two integers.
+]
+
+#warning[
+  *Warning – undefined case*
+
+  `gcd(a, 0)` is fine, but `gcd(0, 0)` is mathematically undefined.
+  Your implementation should reject or handle this explicitly
+]
+
+#remark[
+  *Remark – symmetry property*
+
+  `gcd(a, b)` should always equal `gcd(b, a)`. You can use this to test
+  your implementation
+]
+
+#hint[
+  *Hint – simplifying fractions with gcd*
+
+  Once `gcd(a,b)` works, you can reduce fractions to lowest terms
+]
