@@ -1,15 +1,91 @@
 //Header
+//Header
 #let create_header(theme) = {
   context {
-    let current_slide = query(selector(heading).before(here())).len()
+set text(size: 14pt)
 
+    let current_slide = {
+      let n = query(selector(heading).before(here())).len()
+      if n > 0 { n - 1 } else { 0 }
+    }
     let slides = query(selector(heading))
+
     let section = ""
-    let circles = ""
+    let circles = ()  
     let headers = ()
-    let text_color = theme.sub-text.rgb().transparentize(50%)
+
+    let dim_color = theme.sub-text.rgb().transparentize(50%)
+    let text_color = dim_color
+
+    let split_circles = (section, circles, color) => {
+      if circles.len() == 0 {
+        return (text(fill: color)[],)
+      }
+
+      let title_width = measure(text(fill: color)[#section]).width
+      if title_width == 0pt {
+        return (text(fill: color)[#circles.join("")],)
+      }
+
+      let max_fit = 1
+      for n in range(1, circles.len() + 1) {
+        let s = circles.slice(0, n).join("")
+        let w = measure(text(fill: color)[#s]).width
+        if w <= title_width {
+          max_fit = n
+        } else {
+          break
+        }
+      }
+
+      let max_per_line = max_fit
+      if max_per_line < 6 {
+        max_per_line = 6
+      }
+
+      if circles.len() <= max_per_line {
+        return (text(fill: color)[#circles.join("")],)
+      }
+
+      let lines = ()
+      let i = 0
+      while i < circles.len() {
+        let j = i + max_per_line
+        if j > circles.len() {
+          j = circles.len()
+        }
+        let chunk = circles.slice(i, j)
+        lines.push(text(fill: color)[#chunk.join("")])
+        i = j
+      }
+      lines
+    }
+
+    let make_cell = (section, circles, alignment, outset, color) => {
+      let circle_lines = split_circles(section, circles, color)
+      [
+        #box(
+          width: 100%,
+          outset: outset,
+        )[
+          #align(
+            alignment,
+            grid(
+              columns: 1,
+              align: (left, left),
+              v(0.1em),
+              text(fill: color)[#section],
+              v(0.2em),
+              ..circle_lines,
+            ),
+          )
+        ]
+      ]
+    }
+
     for i in range(0, slides.len()) {
       let slide = slides.at(i)
+
       if slide.level == 1 {
         let outset = (left: 0.1cm, bottom: 0.1cm, top: 0.1cm)
         let alignment = center
@@ -19,54 +95,33 @@
           outset = (left: 0.5cm, bottom: 0.1cm, top: 0.1cm)
         }
 
-        headers.push([
-          #box(
-            width: 100%,
-            outset: outset
-          )[
-            #align(alignment,
-            grid(
-              align: (left,left),
-              v(0.1em),
-              text(fill: text_color)[#section],
-              v(0.5em),
-              text(fill: text_color)[#circles]
-            )
-          )
-        ]])  
+        headers.push(make_cell(section, circles, alignment, outset, text_color))
+
         section = slide.body
-        circles = ""
-        text_color = theme.sub-text.rgb().transparentize(50%)
+        circles = ()
+        text_color = dim_color
         continue
       }
 
       if i < current_slide {
-        circles += "●"
-      }
-      else if i == current_slide {
-        circles += "◉"
-        text_color = theme.sub-text;
-      }
-      else {
-        circles += "○"
-      }
+        circles.push("•")
+      } else if i == current_slide {
+        circles.push("●")
+        text_color = theme.sub-text
+      } else {
+        circles.push("◦")
+      }    
     }
 
-    headers.push([
-      #box(
-        width: 100%,
-        outset: (right: 0.5cm, bottom: 0.1cm, top: 0.1cm)
-      )[
-        #align(right,
-        grid(
-          align: (left,left),
-          v(0.1em),
-          text(fill: text_color)[#section],
-          v(0.5em),
-          text(fill: text_color)[#circles]
-        )
+    headers.push(
+      make_cell(
+        section,
+        circles,
+        right,
+        (right: 0.5cm, bottom: 0.1cm, top: 0.1cm),
+        text_color,
       )
-    ]])  
+    )
 
     grid(
       columns: headers.len(),
@@ -152,13 +207,23 @@
     }
   }
 
+  let header_box = box(
+    width: 100%,
+    outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
+    fill: rgb("#142d69"),
+    create_header(theme)
+  )
+
+
+
   set page(
     width: height * 16 / 10,
     height: height,
     fill: theme.background,
     margin: (
-      top: {if header {2.1em} else {0em}},
-      right: 1em, left: 1em, bottom: {if footer.enable {1.2em + int(authors_short_len/15)*0.9em} else {0em}}),
+      top: 0em,
+      right: 1em, left: 1em, 
+      bottom: {if footer.enable {1.2em + int(authors_short_len/15)*0.9em} else {0em}}),
     //Footer
     footer: context{
       if footer.enable {
@@ -231,18 +296,7 @@
         }
       },
       //Header
-      header: context{
-        if header {
-          grid(
-            box(
-              width: 100%,
-              outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
-              fill: rgb("#142d69"),
-              create_header(theme)
-            ),
-          )
-        }
-      },
+      header: none, 
     )
 
     // Title slide
@@ -310,25 +364,34 @@
     }
 
     // Main slide
-    show heading.where(level: 2): x => {
+    let slide(title) = {
       pagebreak(weak: true)
-      set align(center)
-      set text(size: 20pt)
-      box(
-        inset: 0.2em,
-        text(weight: "bold")[#x.body],
-      )
-    }
 
-    // Main slide
-    show heading.where(level: 3): x => {
-      pagebreak(weak: true)
+      if header {
+        grid(
+          box(
+            width: 100%,
+            outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
+            fill: rgb("#142d69"),
+          )[
+            #create_header(theme)
+          ],
+        )
+      }
+
       set align(center)
       set text(size: 20pt)
       box(
         inset: 0.2em,
-        text(weight: "bold")[#x.body],
+        text(weight: "bold")[#title],
       )
+
+    }
+    show heading.where(level: 2): x => {
+      slide(x.body)
+    }
+    show heading.where(level: 3): x => {
+      slide(x.body)
     }
 
     content

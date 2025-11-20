@@ -8,7 +8,7 @@ Features:
  - Headings for slide creation and sectioning
 
 
-| Title Slide | Table of Contents | Section Slide | Main Slide|
+| Title Slide | Table of Contents | Section Slide | Main Slidel |
 | - | - | - | - |
 | ![Title Slide](screenshots/Thumbnail.png) | ![Section Slide](screenshots/ToC.png) | ![Example-Slide](screenshots/SectionSlide.png) | ![Example-Full-Slide](./screenshots/MainSlide.png) |
 
@@ -25,15 +25,22 @@ After that the package can be imported with `#import "@local/pepentation:0.0.1":
 ## Usage
 
 ```typst
-#import "@local/pepentation:0.0.1": *
 #show: setup_presentation.with(
-  title-long: "Long version of the title",
-  authors-long: ("LastName1 FirstName1", "LastName2 FirstName2"),
-  institute-long: "University of SWAG",
-  title-short: "Title",
-  authors-short: ("Author1", "Author2"),
-  institute-short: "USWAG",
-  date: "October 2025",
+  title-slide: (
+    enable: true,
+    title: "Long version of the title",
+    authors: ("LastName1 FirstName1", "LastName2 FirstName2"),
+    institute: "University of SWAG",
+  ),
+  footer: (
+    enable: true,
+    title: "Title",
+    institute: "USWAG",
+    authors: ("Author1", "Author2"),
+  ),
+  table-of-content: true, // Table of contents is interactive btw. You can click to move to a selected slide
+  header: true,
+  locale: "EN"
 )
 ...
 ```
@@ -42,7 +49,8 @@ Then, insert your content.
 
 - Level-one headings corresponds to new sections.
 - Level-two headings corresponds to new slides.
- - Empty Level-two headings create new empty slide and does not apear in table of contents
+- Empty Level-two headings create new empty slide and does not apear in table of contents
+- Level-three heading do not show up in table of content but the title will be shown the same as in level-two headings
 
 ```typst
 ...
