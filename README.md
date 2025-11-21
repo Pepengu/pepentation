@@ -1,103 +1,130 @@
 # Pepentation
 
-*Simple slides for your univesitie's presentation*
+*Simple slides for your university presentations*
 
-Features:
- - Customisable colorscheme
- - Progress tracker (LaTeX beamer inspired)
- - Headings for slide creation and sectioning
+**Pepentation** is a Typst template designed for clean, academic presentations.
 
+**Features:**
+- 🎨 **Customizable:** Easy to change color schemes to match your institution.
+- 🧭 **Navigation:** Header with bullet-point progress tracker (Beamer-inspired).
+- 🔢 **Smart Layout:** Automatic footer with 3-column layout (Authors, Title, Date/Page).
+- 🧱 **Pre-defined Blocks:** Styled blocks for definitions, warnings, remarks, and hints.
 
-| Title Slide | Table of Contents | Section Slide | Main Slidel |
+| Title Slide | Table of Contents | Section Slide | Main Slide |
 | - | - | - | - |
 | ![Title Slide](screenshots/Thumbnail.png) | ![Section Slide](screenshots/ToC.png) | ![Example-Slide](screenshots/SectionSlide.png) | ![Example-Full-Slide](./screenshots/MainSlide.png) |
 
- ## Setup
+## Setup
 
- Install pepentation by cloning it to folder `{data-dir}/typst/packages/local/pepentation/0.0.1` where `{data-dir}` is
+1.  **Clone or Download** this repository.
+2.  **Place it** in your local Typst package directory:
+    `{data-dir}/typst/packages/local/pepentation/0.1.0`
 
-- `$XDG_DATA_HOME` or `~/.local/share` on Linux
-- `~/Library/Application Support` on macOS
-- `%APPDATA%` on Windows
+    Where `{data-dir}` is:
+    - **Linux:** `$XDG_DATA_HOME` or `~/.local/share`
+    - **macOS:** `~/Library/Application Support`
+    - **Windows:** `%APPDATA%`
+3.  **Import it** in your `.typ` file:
+    ```typst
+    #import "@local/pepentation:0.1.0": *
+    ```
+    
+## Quick Start
 
-After that the package can be imported with `#import "@local/pepentation:0.0.1": *`. 
+Don't want to configure everything from scratch?
+
+Check the **`template/`** folder in this repository. It contains a fully configured `main.typ` file. You can copy this file to your project folder and start editing immediately.
 
 ## Usage
 
+Initialize the template at the top of your file using the `setup_presentation` rule:
+
 ```typst
+#import "@local/pepentation:0.0.1": *
+
 #show: setup_presentation.with(
   title-slide: (
     enable: true,
-    title: "Long version of the title",
-    authors: ("LastName1 FirstName1", "LastName2 FirstName2"),
-    institute: "University of SWAG",
+    title: "Presentation Title",
+    authors: ("Author One", "Author Two"),
+    institute: "University of Typst",
   ),
   footer: (
     enable: true,
-    title: "Title",
-    institute: "USWAG",
-    authors: ("Author1", "Author2"),
+    title: "Short Title",
+    institute: "Short Inst.",
+    authors: ("A. One", "A. Two"),
   ),
-  table-of-content: true, // Table of contents is interactive btw. You can click to move to a selected slide
+  table-of-contents: true, // Interactive: click to jump to section
   header: true,
   locale: "EN"
 )
-...
+
+// Your content goes here...
 ```
 
-Then, insert your content.
+### Structure
+Use standard markdown-like headings to structure your slides:
 
-- Level-one headings corresponds to new sections.
-- Level-two headings corresponds to new slides.
-- Empty Level-two headings create new empty slide and does not apear in table of contents
-- Level-three heading do not show up in table of content but the title will be shown the same as in level-two headings
+- **`= Section`** (Level 1): Creates a dedicated **Section Title Slide**.
+- **`== Slide Title`** (Level 2): Creates a new **Main Slide**.
+- **`== `** (Empty Level 2): Creates a new slide *without* a title (excluded from ToC).
+- **`=== Subsection`** (Level 3): Creates a new slide with a title, but *excluded* from the Table of Contents.
 
 ```typst
-...
+= Introduction
 
-= First Section
+== Motivation
+This is the first slide of the introduction.
 
-== First Slide
-#lorem(20)
+== 
+This slide has no title.
 
-// Second slide with no title
-==
-#lorem(20)
+=== Detail View
+This slide has a title, but won't appear in the outline.
 ```
 
-## Additional functionality
+## Content Blocks
 
-Provides blocks to highlight some informative part of the presentation:
-- ```#defenition[content]```
-- ```#warning[content]```
-- ```#remark[content]```
-- ```#hint[content]```
+The template provides colored blocks for highlighting specific content:
 
-## Options
+- `#definition[content]` (Gray)
+- `#warning[content]` (Red)
+- `#remark[content]` (Orange)
+- `#hint[content]` (Green)
 
-All available Options to initialize the template with
+**Example:**
+```typst
+#definition[
+  *Euclid's Algorithm*
+  An efficient method for computing the GCD.
+]
+```
 
-| Keyword                 | Description                                                    | Default          |
-| ----------------------- | -------------------------------------------------------------- | ---------------- |
-| *title-slide*           | Map of all title slide info                                    | `map`            |
-| *title-slide.enable*    | Wheather to show title slide or not                            | `false`          |
-| *title-slide.title*     | Full title displayed on title page                             | `none`           |
-| *title-slide.authors*   | Full names of authors displayed on title page                  | `()`             |
-| *title-slide.institute* | Full names of institute displayed on title page                | `none`           |
-| *title-long*            | Full title displayed on title page                             | `none`           |
-| *footer*                | Map of all footer info                                         | `map`            |
-| *footer.enable*         | Wheather to show footer or not                                 | `false`          |
-| *footer.title*          | Short title displayed in footer                                | `none`           |
-| *footer.authors*        | Short names of authors displayed in footer                     | `()`             |
-| *footer.institute*      | Short names of institute displayed in footer                   | `none`           |
-| *footer.date*           | Date displayed in footer                                       | `Today`          |
-| *theme*                 | Map of all theme info                                          | `map`            |
-| *theme.primary*         | Primary color of presentation                                  | `rgb("#003365")` |
-| *theme.secondary*       | Secondary color of presentation                                | `rgb("#00649F")` |
-| *theme.main-text*       | Color of content's text.                                       | `rgb("#00649F")` |
-| *theme.sub-text*        | Color of text used in places like header, footer, etc.         | `rgb("#00649F")` |
-| *theme.background*      | Background color of presentation                               | `rgb("#00649F")` |
-| *table-of-content*      | Wheather to show table of content or not                       | `false`          |
-| *header*                | Wheather to show header or not                                 | `true`           |
-| *locale*                | Language of presentation. Only "EN" and "RU" supported for now | `"EN"`           |
-| *height*                | Height of a slide. Most likely you do not need to touch that   | `12cm`           |
+## Configuration Options
+
+These are the parameters available in the `setup_presentation` function:
+
+| Keyword | Description | Default |
+| :--- | :--- | :--- |
+| **`title-slide`** | Dictionary configuration for the title slide | `(enable: false)` |
+| `title-slide.enable` | Whether to show title slide | `false` |
+| `title-slide.title` | Full title displayed on title page | `none` |
+| `title-slide.authors` | Array of author names | `()` |
+| `title-slide.institute` | Institute name | `none` |
+| **`footer`** | Dictionary configuration for the footer | `(enable: false)` |
+| `footer.enable` | Whether to show footer | `false` |
+| `footer.title` | Short title displayed in center of footer | `none` |
+| `footer.authors` | Array of short author names (left side) | `()` |
+| `footer.institute` | Short institute name (left side) | `none` |
+| `footer.date` | Date displayed (right side) | `Today` |
+| **`theme`** | Dictionary for colors | *(See below)* |
+| `theme.primary` | Primary brand color (Header/Footer/Title) | `rgb("#003365")` |
+| `theme.secondary` | Secondary accents | `rgb("#00649F")` |
+| `theme.background` | Slide background color | `rgb("#FFFFFF")` |
+| `theme.main-text` | Body text color | `rgb("#000000")` |
+| `theme.sub-text` | Text color on dark backgrounds (headers) | `rgb("#FFFFFF")` |
+| **`table-of-contents`** | Show the table of contents slide | `false` |
+| **`header`** | Show the navigation header | `true` |
+| **`locale`** | Language ("EN" or "RU") | `"EN"` |
+| **`height`** | Slide height (aspect ratio fixed at 16:10) | `12cm` |
