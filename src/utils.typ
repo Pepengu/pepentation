@@ -49,3 +49,31 @@
 
   [#months.at(month-idx) #now.year()]
 }
+
+/// Merges nested dictionaries, including sub-dictionaries.
+///
+/// This function handles merging of nested dictionary structures, such as
+/// theme dictionaries with a `blocks` sub-dictionary.
+///
+/// # Parameters
+/// - `default-dict` (dictionary): The default dictionary with all possible keys.
+/// - `user-dict` (dictionary or none): The user-provided dictionary to merge.
+///
+/// # Returns
+/// A new dictionary with user values merged into defaults, including nested dictionaries.
+#let merge-nested-dictionary(default-dict, user-dict) = {
+  if user-dict == none {
+    return default-dict
+  }
+  let new-dict = default-dict
+  for (key, value) in user-dict {
+    if key in default-dict.keys() {
+      if type(default-dict.at(key)) == dictionary and type(value) == dictionary {
+        new-dict.insert(key, merge-nested-dictionary(default-dict.at(key), value))
+      } else {
+        new-dict.insert(key, value)
+      }
+    }
+  }
+  return new-dict
+}

@@ -5,10 +5,11 @@
 **Pepentation** is a Typst template designed for clean, academic presentations.
 
 **Features:**
-- 🎨 **Customizable:** Easy to change color schemes to match your institution.
+- 🎨 **Comprehensive Theming:** Extensive theme system with preset themes and easy customization.
 - 🧭 **Navigation:** Header with bullet-point progress tracker (Beamer-inspired).
 - 🔢 **Smart Layout:** Automatic footer with 3-column layout (Authors, Title, Date/Page).
-- 🧱 **Pre-defined Blocks:** Styled blocks for definitions, warnings, remarks, and hints.
+- 🧱 **Rich Content Blocks:** 9 styled block types for definitions, warnings, remarks, hints, info, examples, quotes, success, and failure messages.
+- 🌈 **Theme Presets:** Multiple beautiful themes including light and dark variants.
 
 | Title Slide | Table of Contents | Section Slide | Main Slide |
 | - | - | - | - |
@@ -100,12 +101,17 @@ This slide has a title, but won't appear in the outline.
 
 ## Content Blocks
 
-The template provides colored blocks for highlighting specific content:
+The template provides 9 styled blocks for highlighting specific content:
 
-- `#definition[content]` (Gray)
-- `#warning[content]` (Red)
-- `#remark[content]` (Orange)
-- `#hint[content]` (Green)
+- `#definition[content]` (Gray) - Definitions, theorems, important concepts
+- `#warning[content]` (Red) - Warnings, cautions, important notices
+- `#remark[content]` (Orange) - Remarks, notes, additional observations
+- `#hint[content]` (Green) - Hints, tips, helpful suggestions
+- `#info[content]` (Blue) - Informational content, facts, details
+- `#example[content]` (Purple) - Examples, demonstrations, sample code
+- `#quote[content]` (Neutral Gray) - Quotations, citations, referenced text
+- `#success[content]` (Green) - Success messages, achievements, positive results
+- `#failure[content]` (Red) - Failure messages, errors, issues
 
 **Example:**
 ```typst
@@ -113,6 +119,102 @@ The template provides colored blocks for highlighting specific content:
   *Euclid's Algorithm*
   An efficient method for computing the GCD.
 ]
+
+#info[
+  *Information – Time Complexity*
+  The algorithm runs in `O(n log n)` time.
+]
+
+#example[
+  *Example – Usage*
+  ```python
+  result = gcd(48, 18)
+  # Returns: 6
+  ```
+]
+
+#success[
+  *Success – Implementation Complete*
+  All test cases pass!
+]
+```
+
+## Theming System
+
+Pepentation features a comprehensive theming system that allows you to customize colors for all elements, including blocks and inline code.
+
+### Using Theme Presets
+
+Import the themes module and use a preset theme:
+
+```typst
+#import "@local/pepentation:0.1.0": *
+
+#show: setup-presentation.with(
+  theme: themes.theme-azure-breeze,
+  // ... other options
+)
+```
+
+### Available Theme Presets
+
+- **`theme-azure-breeze`** / **`theme-azure-breeze-dark`** - Light blue theme with fresh, airy feel
+- **`theme-crimson-dawn`** / **`theme-crimson-dawn-dark`** - Red-based theme with warm, energetic tones
+- **`theme-forest-canopy`** / **`theme-forest-canopy-dark`** - Green-based theme with natural, calming tones
+- **`theme-deep-ocean`** / **`theme-deep-ocean-dark`** - Blue-based theme (enhanced default)
+- **`theme-twilight-violet`** / **`theme-twilight-violet-dark`** - Purple-based theme with elegant, mysterious tones
+- **`theme-golden-hour`** / **`theme-golden-hour-dark`** - Warm, sunset-inspired theme with golden and amber tones
+- **`theme-emerald-glow`** / **`theme-emerald-glow-dark`** - Vibrant green theme with emerald accents
+
+### Customizing Themes
+
+You can easily customize any theme by merging it with your own values:
+
+```typst
+#import "@local/pepentation:0.1.0": *
+
+#show: setup-presentation.with(
+  theme: (
+    ..themes.theme-azure-breeze,
+    primary: rgb("#FF0000"),  // Override primary color
+    blocks: (
+      ..themes.theme-azure-breeze.blocks,
+      definition-color: rgb("#888888"),  // Override block color
+    ),
+  ),
+)
+```
+
+### Creating Custom Themes
+
+You can create your own theme by defining a dictionary with all theme properties:
+
+```typst
+#let my-custom-theme = (
+  primary: rgb("#003365"),
+  secondary: rgb("#00649F"),
+  background: rgb("#FFFFFF"),
+  main-text: rgb("#000000"),
+  sub-text: rgb("#FFFFFF"),
+  sub-text-dimmed: rgb("#FFFFFF"),
+  code-background: luma(240),
+  code-text: none,
+  blocks: (
+    definition-color: gray,
+    warning-color: red,
+    remark-color: orange,
+    hint-color: green,
+    info-color: blue,
+    example-color: purple,
+    quote-color: luma(200),
+    success-color: rgb("#22c55e"),
+    failure-color: rgb("#ef4444"),
+  ),
+)
+
+#show: setup-presentation.with(
+  theme: my-custom-theme,
+)
 ```
 
 ## Configuration Options
@@ -132,13 +234,30 @@ These are the parameters available in the `setup-presentation` function:
 | `footer.authors` | Array of short author names (left side) | `()` |
 | `footer.institute` | Short institute name (left side) | `none` |
 | `footer.date` | Date displayed (right side) | `Today` |
-| **`theme`** | Dictionary for colors | *(See below)* |
+| **`theme`** | Dictionary for colors | *(See Theme System above)* |
 | `theme.primary` | Primary brand color (Header/Footer/Title) | `rgb("#003365")` |
 | `theme.secondary` | Secondary accents | `rgb("#00649F")` |
 | `theme.background` | Slide background color | `rgb("#FFFFFF")` |
 | `theme.main-text` | Body text color | `rgb("#000000")` |
 | `theme.sub-text` | Text color on dark backgrounds (headers) | `rgb("#FFFFFF")` |
+| `theme.sub-text-dimmed` | Dimmed text color | `rgb("#FFFFFF")` |
+| `theme.code-background` | Background color for inline code | `luma(240)` |
+| `theme.code-text` | Text color for inline code (optional) | `none` |
+| `theme.blocks` | Dictionary of block colors | *(See default-theme)* |
+| `theme.blocks.definition-color` | Color for definition blocks | `gray` |
+| `theme.blocks.warning-color` | Color for warning blocks | `red` |
+| `theme.blocks.remark-color` | Color for remark blocks | `orange` |
+| `theme.blocks.hint-color` | Color for hint blocks | `green` |
+| `theme.blocks.info-color` | Color for info blocks | `blue` |
+| `theme.blocks.example-color` | Color for example blocks | `purple` |
+| `theme.blocks.quote-color` | Color for quote blocks | `luma(200)` |
+| `theme.blocks.success-color` | Color for success blocks | `rgb("#22c55e")` |
+| `theme.blocks.failure-color` | Color for failure blocks | `rgb("#ef4444")` |
 | **`table-of-contents`** | Show the table of contents slide | `false` |
 | **`header`** | Show the navigation header | `true` |
 | **`locale`** | Language ("EN" or "RU") | `"EN"` |
 | **`height`** | Slide height (aspect ratio fixed at 16:10) | `12cm` |
+
+## Theme Examples
+
+Check the `examples/` directory for demonstration files showing all available themes. Each theme has its own `.typ` file that you can compile to see the theme in action.

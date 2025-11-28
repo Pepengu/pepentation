@@ -1,9 +1,10 @@
 #import "src/utils.typ"
 #import "src/layout.typ"
 #import "src/blocks.typ"
+#import "src/themes.typ" as themes
 
 /// A styled block for displaying definitions.
-/// 
+///
 /// This function creates a gray-colored block suitable for highlighting
 /// definitions, theorems, or important concepts in your presentation.
 ///
@@ -58,6 +59,78 @@
 /// ```
 #let hint = blocks.hint
 
+/// A styled block for displaying informational content.
+///
+/// This function creates a blue-colored block suitable for highlighting
+/// informational content, facts, or additional details in your presentation.
+///
+/// # Example
+/// ```typ
+/// #info[
+///   *Information – Time Complexity*
+///   The algorithm runs in `O(n log n)` time.
+/// ]
+/// ```
+#let info = blocks.info
+
+/// A styled block for displaying examples.
+///
+/// This function creates a purple-colored block suitable for highlighting
+/// examples, demonstrations, or sample code in your presentation.
+///
+/// # Example
+/// ```typ
+/// #example[
+///   *Example – Usage*
+///   ```python
+///   result = gcd(48, 18)
+///   ```
+/// ]
+/// ```
+#let example = blocks.example
+
+/// A styled block for displaying quotations.
+///
+/// This function creates a neutral gray-colored block suitable for displaying
+/// quotes, citations, or referenced text in your presentation.
+///
+/// # Example
+/// ```typ
+/// #quote[
+///   "The best way to understand an algorithm is to implement it yourself."
+///   — Computer Science Professor
+/// ]
+/// ```
+#let quote = blocks.quote
+
+/// A styled block for displaying success messages.
+///
+/// This function creates a green-colored block suitable for highlighting
+/// successful outcomes, achievements, or positive results in your presentation.
+///
+/// # Example
+/// ```typ
+/// #success[
+///   *Success – Implementation Complete*
+///   All test cases pass!
+/// ]
+/// ```
+#let success = blocks.success
+
+/// A styled block for displaying failure messages.
+///
+/// This function creates a red-colored block suitable for highlighting
+/// failures, errors, or issues that need attention in your presentation.
+///
+/// # Example
+/// ```typ
+/// #failure[
+///   *Failure – Test Failed*
+///   The implementation does not handle edge cases correctly.
+/// ]
+/// ```
+#let failure = blocks.failure
+
 /// Sets up the presentation with customizable options.
 ///
 /// This is the main function that configures the entire presentation layout,
@@ -85,6 +158,11 @@
 ///   - `main-text` (color, default: `rgb("#000000")`): Body text color.
 ///   - `sub-text` (color, default: `rgb("#FFFFFF")`): Text color on dark backgrounds.
 ///   - `sub-text-dimmed` (color, default: `rgb("#FFFFFF")`): Dimmed text color.
+///   - `code-background` (color, default: `luma(240)`): Background color for inline code.
+///   - `code-text` (color or none, default: `none`): Text color for inline code.
+///   - `blocks` (dictionary): Block-specific colors.
+///     - `definition-color`, `warning-color`, `remark-color`, `hint-color`
+///     - `info-color`, `example-color`, `quote-color`, `success-color`, `failure-color`
 ///
 /// - `height` (length, default: `12cm`): Slide height (aspect ratio fixed at 16:10).
 /// - `table-of-contents` (boolean, default: `false`): Whether to show an interactive table of contents.
@@ -134,6 +212,8 @@
 ) = {
   assert(locale in ("RU", "EN"))
 
+  let theme-state = state("pepentation-theme", none)
+
   let title-slide-config = utils.merge-dictionary((
     enable: false, title: none, authors: (), institute: none
   ), title-slide)
@@ -142,20 +222,16 @@
     enable: false, title: none, institute: none, authors: (), date: utils.today(locale)
   ), footer)
 
-  let theme-config = utils.merge-dictionary((
-    primary: rgb("#003365"),
-    secondary: rgb("#00649F"),
-    background: rgb("#FFFFFF"),
-    main-text: rgb("#000000"),
-    sub-text: rgb("#FFFFFF"),
-    sub-text-dimmed: rgb("#FFFFFF"),
-  ), theme)
+  let default-theme = themes.default-theme
+  let theme-config = utils.merge-nested-dictionary(default-theme, theme)
+
+  theme-state.update(theme-config)
 
   let page-width = height * 16 / 10
   let footer-h = layout.estimate-footer-height(footer-config, theme-config, height)
   let bottom-margin = if footer-config.enable { footer-h + 1em } else { 0em }
 
-  let footer-content = align(bottom, 
+  let footer-content = align(bottom,
     box(width: 100%, layout.create-footer(footer-config, theme-config, page-width, footer-h))
   )
 
@@ -165,18 +241,28 @@
     fill: theme-config.background,
     margin: (top: 0em, right: 1em, left: 1em, bottom: bottom-margin),
     header: none,
-    footer: footer-content, 
+    footer: footer-content,
   )
-  
+
   set text(size: 14pt, fill: theme-config.main-text)
   set par(first-line-indent: (amount: 1em, all: true), justify: true)
-  
-  show raw.where(block: false): box.with(
-    fill: luma(240),
-    inset: (x: 3pt, y: 0pt),
-    outset: (y: 3pt),
-    radius: 5pt,
-  )
+
+  let code-bg = theme-config.code-background
+  let code-text = theme-config.code-text
+  show raw.where(block: false): it => {
+    let styled-content = if code-text != none {
+      text(fill: code-text, it.text)
+    } else {
+      it.text
+    }
+    box(
+      fill: code-bg,
+      inset: (x: 3pt, y: 0pt),
+      outset: (y: 3pt),
+      radius: 5pt,
+      styled-content
+    )
+  }
 
   if title-slide-config.enable {
     set page(header: none, footer: none, margin: 2em)
@@ -192,12 +278,48 @@
   if table-of-contents {
     pagebreak() 
     set page(header: none)
-    show outline.entry.where(level: 1): set text(size: 1.6em)
-    show outline.entry.where(level: 2): set text(size: 1.2em)
-    show outline.entry: it => if it.element.body == [] { none } else { it }
-
+    
     let toc-title = if locale == "RU" { [*Оглавление*] } else { [*Table of contents*] }
-    align(center, text(size: 2.2em)[#v(0.2em) #toc-title])
+    align(center, box(
+      fill: theme-config.primary,
+      radius: 15pt,
+      inset: 1em,
+      width: 100%,
+      text(size: 2.2em, weight: "bold", fill: theme-config.sub-text)[#toc-title]
+    ))
+    
+    v(1.5em)
+
+    show outline.entry.where(level: 1): it => {
+      if it.element.body == [] {
+        none
+      } else {
+        block(
+          width: 100%,
+          box(
+            fill: theme-config.primary.transparentize(90%),
+            radius: 8pt,
+            inset: 0.8em,
+            link(it.element.location(), text(size: 1.4em, weight: "bold", fill: theme-config.primary)[#it.element.body])
+          )
+        )
+      }
+    }
+    
+    show outline.entry.where(level: 2): it => {
+      if it.element.body == [] {
+        none
+      } else {
+        block(
+          width: 100%,
+          box(
+            inset: (left: 1.5em, top: 0.4em, bottom: 0.4em),
+            link(it.element.location(), text(size: 1.1em, fill: theme-config.main-text)[#it.element.body])
+          )
+        )
+      }
+    }
+    
     columns(2, outline(depth: 2, title: none))
   }
 
@@ -217,7 +339,7 @@
       grid(box(
         width: 100%,
         outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
-        fill: rgb("#142d69"), 
+        fill: theme-config.primary, 
         layout.create-header(theme-config)
       ))
     }

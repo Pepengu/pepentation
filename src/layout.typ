@@ -87,7 +87,7 @@
       align(horizon, move(dy: -0.3em, c-authors))
     ),
     box(
-      fill: rgb("#0064A0"), width: 100%, height: fixed-height,
+      fill: theme.secondary, width: 100%, height: fixed-height,
       outset: (bottom: 3em, top: 0.5em),
       align(horizon+center, move(dy: -0.2em, c-title))
     ),
