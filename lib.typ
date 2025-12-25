@@ -304,15 +304,17 @@
       grid(box(
         width: 100%,
         outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
-        fill: theme-config.primary, 
+        fill: theme-config.primary,
         layout.create-header(theme-config)
       ))
     }
-    set align(center)
-    set text(size: 20pt)
-    box(inset: 0.2em, text(weight: "bold", title))
 
-    v(-0.6em)
+    if title != [] {
+      set align(center)
+      set text(size: 20pt)
+      box(inset: 0.2em, text(weight: "bold", title))
+      v(-0.6em)
+    }
   }
   
   show heading.where(level: 2): it => render-slide(it.body)

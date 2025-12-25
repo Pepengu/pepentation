@@ -22,10 +22,16 @@
 
 == Slide Title
 
+This is a slide with a title
+
 #lorem(100)
 
 //If no title is provided it will not be shown in table of content
 ==
+
+This is slide with no title
+
+#lorem(100)
 
 = Math
 
