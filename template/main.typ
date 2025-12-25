@@ -1,4 +1,4 @@
-#import "@preview/pepentation:0.1.0": *
+#import "@local/pepentation:0.1.1": *
 
 #show: setup-presentation.with(
   title-slide: (
@@ -13,7 +13,7 @@
     institute: "USWAG",
     authors: ("Author1", "Author2"),
   ),
-  table-of-contents: true, // Table of contents is interactive btw. You can click to move to a selected slide
+  table-of-contents: "detailed",
   header: true,
   locale: "EN"
 )

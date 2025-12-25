@@ -13,17 +13,18 @@
 /// The estimated footer height in points. Returns `0pt` if footer is disabled.
 #let estimate-footer-height(footer, theme, page-height) = {
   if not footer.enable { return 0pt }
-  
+
   let page-width = page-height * 16 / 10
   let available-width = (page-width / 3) - 2.5cm
-  let char-count = footer.authors.join(", ").len()
-  
-  let lines = if char-count > 0 { 
-    calc.ceil(char-count / (available-width / 5.5pt)) 
-  } else { 
-    1 
+  // Temporarily ignore authors for estimation
+  let char-count = 0
+
+  let lines = if char-count > 0 {
+    calc.ceil(char-count / (available-width / 5.5pt))
+  } else {
+    1
   }
-  
+
   calc.max(lines * 1em, 1em)
 }
 
@@ -49,7 +50,7 @@
 
   let sub-text = theme.sub-text
 
-  let c-authors = if footer.authors.len() > 0 {
+  let c-authors = if footer.authors != none and footer.authors.len() > 0 {
     text(fill: sub-text)[
       #grid(
         columns: 2, align: (center+horizon, center+horizon),

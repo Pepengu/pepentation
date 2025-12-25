@@ -6,7 +6,7 @@
 
 **Features:**
 - 🎨 **Comprehensive Theming:** Extensive theme system with preset themes and easy customization.
-- 🧭 **Navigation:** Header with bullet-point progress tracker (Beamer-inspired).
+- 🧭 **Navigation:** Header with bullet-point progress tracker and interactive table of contents (Beamer-inspired).
 - 🔢 **Smart Layout:** Automatic footer with 3-column layout (Authors, Title, Date/Page).
 - 🧱 **Rich Content Blocks:** 9 styled block types for definitions, warnings, remarks, hints, info, examples, quotes, success, and failure messages.
 - 🌈 **Theme Presets:** Multiple beautiful themes including light and dark variants.
@@ -22,7 +22,7 @@
 Simply import the package in your `.typ` file:
 
 ```typst
-#import "@preview/pepentation:0.1.0": *
+#import "@preview/pepentation:0.2.0": *
 ```
 
 The package will be automatically downloaded on first use.
@@ -55,7 +55,7 @@ Check the **`template/`** folder in this repository. It contains a fully configu
 Initialize the template at the top of your file using the `setup-presentation` rule:
 
 ```typst
-#import "@preview/pepentation:0.1.0": *
+#import "@preview/pepentation:0.2.0": *
 
 #show: setup-presentation.with(
   title-slide: (
@@ -70,7 +70,7 @@ Initialize the template at the top of your file using the `setup-presentation` r
     institute: "Short Inst.",
     authors: ("A. One", "A. Two"),
   ),
-  table-of-contents: true, // Interactive: click to jump to section
+  table-of-contents: "detailed", // Interactive: click to jump to section
   header: true,
   locale: "EN"
 )
@@ -98,6 +98,16 @@ This slide has no title.
 === Detail View
 This slide has a title, but won't appear in the outline.
 ```
+
+## Table of Contents Styles
+
+Pepentation offers two different styles for the table of contents:
+
+- **`"detailed"`** (default): A compact 3-column layout that includes both section titles and subsections. This style displays level 1 headings with slide numbers and includes level 2 subheadings in a multi-column format for efficient space usage.
+
+- **`"simple"`**: A clean 2-column grid layout displaying only section titles (level 1 headings) in styled boxes. This provides a simpler, more spacious overview of your presentation structure.
+
+- **`"none"`**: Disables the table of contents entirely.
 
 ## Content Blocks
 
@@ -148,7 +158,7 @@ Pepentation features a comprehensive theming system that allows you to customize
 Import the themes module and use a preset theme:
 
 ```typst
-#import "@local/pepentation:0.1.0": *
+#import "@local/pepentation:0.2.0": *
 
 #show: setup-presentation.with(
   theme: themes.theme-azure-breeze,
@@ -171,7 +181,7 @@ Import the themes module and use a preset theme:
 You can easily customize any theme by merging it with your own values:
 
 ```typst
-#import "@local/pepentation:0.1.0": *
+#import "@local/pepentation:0.2.0": *
 
 #show: setup-presentation.with(
   theme: (
@@ -253,11 +263,7 @@ These are the parameters available in the `setup-presentation` function:
 | `theme.blocks.quote-color` | Color for quote blocks | `luma(200)` |
 | `theme.blocks.success-color` | Color for success blocks | `rgb("#22c55e")` |
 | `theme.blocks.failure-color` | Color for failure blocks | `rgb("#ef4444")` |
-| **`table-of-contents`** | Show the table of contents slide | `false` |
+| **`table-of-contents`** | Style for the table of contents (`"none"`, `"detailed"`, `"simple"`) | `"detailed"` |
 | **`header`** | Show the navigation header | `true` |
 | **`locale`** | Language ("EN" or "RU") | `"EN"` |
 | **`height`** | Slide height (aspect ratio fixed at 16:10) | `12cm` |
-
-## Theme Examples
-
-Check the `examples/` directory for demonstration files showing all available themes. Each theme has its own `.typ` file that you can compile to see the theme in action.

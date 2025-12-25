@@ -2,6 +2,7 @@
 #import "src/layout.typ"
 #import "src/blocks.typ"
 #import "src/themes.typ" as themes
+#import "src/toc.typ"
 
 /// A styled block for displaying definitions.
 ///
@@ -165,7 +166,7 @@
 ///     - `info-color`, `example-color`, `quote-color`, `success-color`, `failure-color`
 ///
 /// - `height` (length, default: `12cm`): Slide height (aspect ratio fixed at 16:10).
-/// - `table-of-contents` (boolean, default: `false`): Whether to show an interactive table of contents.
+/// - `table-of-contents` (string, default: `"detailed"`): Style for the table of contents. Options: `"none"`, `"detailed"`, `"simple"`. Use `"none"` to disable the table of contents.
 /// - `header` (boolean, default: `true`): Whether to show the navigation header with progress tracker.
 /// - `locale` (string, default: `"EN"`): Language locale, either `"EN"` or `"RU"`.
 /// - `content` (content): The content of your presentation.
@@ -191,7 +192,7 @@
 ///     title: "Short Title",
 ///     authors: ("J. Doe", "J. Smith"),
 ///   ),
-///   table-of-contents: true,
+///   table-of-contents: "detailed",  // or "simple" or "none"
 ///   header: true,
 ///   locale: "EN"
 /// )
@@ -205,12 +206,13 @@
   footer: none,
   theme: none,
   height: 12cm,
-  table-of-contents: false,
+  table-of-contents: "detailed",
   header: true,
   locale: "EN",
   content
 ) = {
   assert(locale in ("RU", "EN"))
+  assert(table-of-contents in ("none", "detailed", "simple"))
 
   let theme-state = state("pepentation-theme", none)
 
@@ -221,6 +223,10 @@
   let footer-config = utils.merge-dictionary((
     enable: false, title: none, institute: none, authors: (), date: utils.today(locale)
   ), footer)
+  // Ensure authors is always an array
+  if footer-config.authors == none {
+    footer-config.authors = ()
+  }
 
   let default-theme = themes.default-theme
   let theme-config = utils.merge-nested-dictionary(default-theme, theme)
@@ -246,6 +252,7 @@
 
   set text(size: 14pt, fill: theme-config.main-text)
   set par(first-line-indent: (amount: 1em, all: true), justify: true)
+  set heading(numbering: "1.")
 
   let code-bg = theme-config.code-background
   let code-text = theme-config.code-text
@@ -275,52 +282,10 @@
     align(center, text(size: 1.4em, title-slide-config.institute))
   }
 
-  if table-of-contents {
-    pagebreak() 
+  if table-of-contents != "none" {
+    pagebreak()
     set page(header: none)
-    
-    let toc-title = if locale == "RU" { [*Оглавление*] } else { [*Table of contents*] }
-    align(center, box(
-      fill: theme-config.primary,
-      radius: 15pt,
-      inset: 1em,
-      width: 100%,
-      text(size: 2.2em, weight: "bold", fill: theme-config.sub-text)[#toc-title]
-    ))
-    
-    v(1.5em)
-
-    show outline.entry.where(level: 1): it => {
-      if it.element.body == [] {
-        none
-      } else {
-        block(
-          width: 100%,
-          box(
-            fill: theme-config.primary.transparentize(90%),
-            radius: 8pt,
-            inset: 0.8em,
-            link(it.element.location(), text(size: 1.4em, weight: "bold", fill: theme-config.primary)[#it.element.body])
-          )
-        )
-      }
-    }
-    
-    show outline.entry.where(level: 2): it => {
-      if it.element.body == [] {
-        none
-      } else {
-        block(
-          width: 100%,
-          box(
-            inset: (left: 1.5em, top: 0.4em, bottom: 0.4em),
-            link(it.element.location(), text(size: 1.1em, fill: theme-config.main-text)[#it.element.body])
-          )
-        )
-      }
-    }
-    
-    columns(2, outline(depth: 2, title: none))
+    context toc.render-toc(table-of-contents, theme-config, locale)
   }
 
   show heading.where(level: 1): it => {

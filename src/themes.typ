@@ -32,6 +32,9 @@
   code-background: luma(240),
   code-text: none,
   dark: false,
+  toc-background: rgb("#003365").transparentize(95%),
+  toc-text: rgb("#003365"),
+  toc-stroke: rgb("#003365").lighten(50%),
   blocks: (
     definition-color: gray,
     warning-color: red,
@@ -56,6 +59,9 @@
   code-background: rgb("#e0f2fe"),
   code-text: rgb("#0369a1"),
   dark: false,
+  toc-background: rgb("#0ea5e9").transparentize(95%),
+  toc-text: rgb("#0ea5e9"),
+  toc-stroke: rgb("#0ea5e9").lighten(50%),
   blocks: (
     definition-color: rgb("#cbd5e1"),
     warning-color: rgb("#fca5a5"),
@@ -80,6 +86,9 @@
   code-background: rgb("#0a1a2a"),
   code-text: rgb("#7dd3fc"),
   dark: true,
+  toc-background: rgb("#0284c7").lighten(50%).transparentize(95%),
+  toc-text: rgb("#0284c7").lighten(60%),
+  toc-stroke: rgb("#0284c7").lighten(20%),
   blocks: (
     definition-color: rgb("#334155"),
     warning-color: rgb("#991b1b"),
@@ -104,6 +113,9 @@
   code-background: rgb("#fee2e2"),
   code-text: rgb("#991b1b"),
   dark: false,
+  toc-background: rgb("#dc2626").transparentize(95%),
+  toc-text: rgb("#dc2626"),
+  toc-stroke: rgb("#dc2626").lighten(50%),
   blocks: (
     definition-color: rgb("#e5e7eb"),
     warning-color: rgb("#fca5a5"),
@@ -128,6 +140,9 @@
   code-background: rgb("#450a0a"),
   code-text: rgb("#fca5a5"),
   dark: true,
+  toc-background: rgb("#b91c1c").lighten(50%).transparentize(95%),
+  toc-text: rgb("#b91c1c").lighten(60%),
+  toc-stroke: rgb("#b91c1c").lighten(20%),
   blocks: (
     definition-color: rgb("#374151"),
     warning-color: rgb("#991b1b"),
@@ -152,6 +167,9 @@
   code-background: rgb("#dcfce7"),
   code-text: rgb("#166534"),
   dark: false,
+  toc-background: rgb("#16a34a").transparentize(95%),
+  toc-text: rgb("#16a34a"),
+  toc-stroke: rgb("#16a34a").lighten(50%),
   blocks: (
     definition-color: rgb("#d1d5db"),
     warning-color: rgb("#fca5a5"),
@@ -176,6 +194,9 @@
   code-background: rgb("#052e15"),
   code-text: rgb("#86efac"),
   dark: true,
+  toc-background: rgb("#15803d").lighten(50%).transparentize(95%),
+  toc-text: rgb("#15803d").lighten(60%),
+  toc-stroke: rgb("#15803d").lighten(20%),
   blocks: (
     definition-color: rgb("#1f2937"),
     warning-color: rgb("#991b1b"),
@@ -200,6 +221,9 @@
   code-background: luma(240),
   code-text: none,
   dark: false,
+  toc-background: rgb("#003365").transparentize(95%),
+  toc-text: rgb("#003365"),
+  toc-stroke: rgb("#003365").lighten(50%),
   blocks: (
     definition-color: gray,
     warning-color: red,
@@ -224,6 +248,9 @@
   code-background: rgb("#000a1a"),
   code-text: rgb("#7dd3fc"),
   dark: true,
+  toc-background: rgb("#00649F").lighten(50%).transparentize(95%),
+  toc-text: rgb("#00649F").lighten(60%),
+  toc-stroke: rgb("#00649F").lighten(20%),
   blocks: (
     definition-color: rgb("#1e3a5f"),
     warning-color: rgb("#991b1b"),
@@ -248,6 +275,9 @@
   code-background: rgb("#e9d5ff"),
   code-text: rgb("#6b21a8"),
   dark: false,
+  toc-background: rgb("#7c3aed").transparentize(95%),
+  toc-text: rgb("#7c3aed"),
+  toc-stroke: rgb("#7c3aed").lighten(50%),
   blocks: (
     definition-color: rgb("#e5e7eb"),
     warning-color: rgb("#fca5a5"),
@@ -272,6 +302,9 @@
   code-background: rgb("#1a0529"),
   code-text: rgb("#c084fc"),
   dark: true,
+  toc-background: rgb("#6b21a8").lighten(50%).transparentize(95%),
+  toc-text: rgb("#6b21a8").lighten(60%),
+  toc-stroke: rgb("#6b21a8").lighten(20%),
   blocks: (
     definition-color: rgb("#1f2937"),
     warning-color: rgb("#991b1b"),
@@ -296,6 +329,9 @@
   code-background: rgb("#fef3c7"),
   code-text: rgb("#92400e"),
   dark: false,
+  toc-background: rgb("#d97706").transparentize(95%),
+  toc-text: rgb("#d97706"),
+  toc-stroke: rgb("#d97706").lighten(50%),
   blocks: (
     definition-color: rgb("#f3f4f6"),
     warning-color: rgb("#fca5a5"),
@@ -320,6 +356,9 @@
   code-background: rgb("#2d1b05"),
   code-text: rgb("#fcd34d"),
   dark: true,
+  toc-background: rgb("#b45309").lighten(50%).transparentize(95%),
+  toc-text: rgb("#b45309").lighten(60%),
+  toc-stroke: rgb("#b45309").lighten(20%),
   blocks: (
     definition-color: rgb("#1f2937"),
     warning-color: rgb("#991b1b"),
@@ -344,6 +383,9 @@
   code-background: rgb("#d1fae5"),
   code-text: rgb("#047857"),
   dark: false,
+  toc-background: rgb("#059669").transparentize(95%),
+  toc-text: rgb("#059669"),
+  toc-stroke: rgb("#059669").lighten(50%),
   blocks: (
     definition-color: rgb("#e5e7eb"),
     warning-color: rgb("#fca5a5"),
@@ -368,6 +410,9 @@
   code-background: rgb("#052e1f"),
   code-text: rgb("#6ee7b7"),
   dark: true,
+  toc-background: rgb("#047857").lighten(50%).transparentize(95%),
+  toc-text: rgb("#047857").lighten(60%),
+  toc-stroke: rgb("#047857").lighten(20%),
   blocks: (
     definition-color: rgb("#1f2937"),
     warning-color: rgb("#991b1b"),
@@ -380,4 +425,3 @@
     failure-color: rgb("#dc2626"),
   ),
 )
-
