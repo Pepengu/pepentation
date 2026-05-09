@@ -1,4 +1,4 @@
-#import "@preview/pepentation:0.2.1": *
+#import "../lib.typ": *
 
 #show: setup-presentation.with(
   title-slide: (
@@ -11,7 +11,7 @@
     enable: true,
     title: "Title",
     institute: "USWAG",
-    authors: ("Author1", "Author2"),
+    authors: ("Author1", "Author2", "Author3"),
   ),
   table-of-contents: "detailed",
   header: true,
@@ -33,7 +33,7 @@ This is slide with no title
 
 #lorem(100)
 
-= Math
+#section-slide(title: "Math", subtitle: "Simple example of math presentation")
 
 == Greatest common divisor
 

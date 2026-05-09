@@ -5,8 +5,30 @@
 ///
 /// # Usage
 /// ```typ
-/// #import "@local/pepentation:0.1.0": *
-/// #import "@local/pepentation:0.1.0/themes": themes
+/// #import "@preview/pepentation:0.2.1": *
+/// #import "@preview/pepentation:0.2.1/themes": themes
+///
+/// #show: setup-presentation.with(
+///   theme: themes.theme-azure-breeze
+/// )
+/// ```
+///
+/// # Customization
+/// You can easily customize themes by merging:
+/// ```typ
+/// #show: setup-presentation.with(
+///   theme: (..themes.theme-azure-breeze, primary: rgb("#FF0000"))
+/// )
+/// ```
+///
+/// # Theme Properties
+/// - `section-subtitle-size`: Font size for section subtitles (default: `1em`).
+/// - `section-subtitle-position`: Where to display section subtitles. Options: `"inside"` (within title box with separator line), `"below"` (below title box). Default: `"inside"`.
+///
+/// # Usage
+/// ```typ
+/// #import "@local/pepentation:0.2.1": *
+/// #import "@local/pepentation:0.2.1/themes": themes
 ///
 /// #show: setup-presentation.with(
 ///   theme: themes.theme-azure-breeze
@@ -29,6 +51,8 @@
   main-text: rgb("#000000"),
   sub-text: rgb("#FFFFFF"),
   sub-text-dimmed: rgb("#FFFFFF"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: luma(240),
   code-text: none,
   dark: false,
@@ -56,6 +80,8 @@
   main-text: rgb("#0c4a6e"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#e0f2fe"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#e0f2fe"),
   code-text: rgb("#0369a1"),
   dark: false,
@@ -83,6 +109,8 @@
   main-text: rgb("#e0f2fe"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#7dd3fc"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#0a1a2a"),
   code-text: rgb("#7dd3fc"),
   dark: true,
@@ -110,6 +138,8 @@
   main-text: rgb("#7f1d1d"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#fee2e2"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#fee2e2"),
   code-text: rgb("#991b1b"),
   dark: false,
@@ -137,6 +167,8 @@
   main-text: rgb("#fee2e2"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#fca5a5"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#450a0a"),
   code-text: rgb("#fca5a5"),
   dark: true,
@@ -164,6 +196,8 @@
   main-text: rgb("#14532d"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#dcfce7"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#dcfce7"),
   code-text: rgb("#166534"),
   dark: false,
@@ -191,6 +225,8 @@
   main-text: rgb("#dcfce7"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#86efac"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#052e15"),
   code-text: rgb("#86efac"),
   dark: true,
@@ -218,6 +254,8 @@
   main-text: rgb("#000000"),
   sub-text: rgb("#FFFFFF"),
   sub-text-dimmed: rgb("#E6F2F8"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: luma(240),
   code-text: none,
   dark: false,
@@ -245,6 +283,8 @@
   main-text: rgb("#E6F2F8"),
   sub-text: rgb("#FFFFFF"),
   sub-text-dimmed: rgb("#7dd3fc"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#000a1a"),
   code-text: rgb("#7dd3fc"),
   dark: true,
@@ -272,6 +312,8 @@
   main-text: rgb("#3b0764"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#e9d5ff"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#e9d5ff"),
   code-text: rgb("#6b21a8"),
   dark: false,
@@ -299,6 +341,8 @@
   main-text: rgb("#e9d5ff"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#c084fc"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#1a0529"),
   code-text: rgb("#c084fc"),
   dark: true,
@@ -326,6 +370,8 @@
   main-text: rgb("#78350f"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#fef3c7"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#fef3c7"),
   code-text: rgb("#92400e"),
   dark: false,
@@ -353,6 +399,8 @@
   main-text: rgb("#fef3c7"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#fcd34d"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#2d1b05"),
   code-text: rgb("#fcd34d"),
   dark: true,
@@ -380,6 +428,8 @@
   main-text: rgb("#064e3b"),
   sub-text: rgb("#ffffff"),
   sub-text-dimmed: rgb("#d1fae5"),
+  section-subtitle-size: 1em,
+  section-subtitle-position: "inside",
   code-background: rgb("#d1fae5"),
   code-text: rgb("#047857"),
   dark: false,

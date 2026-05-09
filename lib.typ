@@ -132,6 +132,29 @@
 /// ```
 #let failure = blocks.failure
 
+/// Creates a section slide with an optional subtitle.
+///
+/// This function creates a dedicated section title slide with a title and
+/// optional subtitle. The slide is styled with the primary theme color.
+/// The title will appear in the table of contents.
+///
+/// # Example
+/// ```typ
+/// #section-slide(title: "Introduction", subtitle: "Overview of the topic")
+/// ```
+///
+/// # Parameters
+/// - `title` (string or content): The section title (required).
+/// - `subtitle` (string or content, default: `none`): Optional subtitle displayed below the title.
+#let section-slide(title: none, subtitle: none) = {
+  assert(title != none, message: "section-slide requires a title")
+  if subtitle != none {
+    heading(level: 1, [#title #metadata(subtitle) <section-subtitle>])
+  } else {
+    heading(level: 1, title)
+  }
+}
+
 /// Sets up the presentation with customizable options.
 ///
 /// This is the main function that configures the entire presentation layout,
@@ -159,6 +182,8 @@
 ///   - `main-text` (color, default: `rgb("#000000")`): Body text color.
 ///   - `sub-text` (color, default: `rgb("#FFFFFF")`): Text color on dark backgrounds.
 ///   - `sub-text-dimmed` (color, default: `rgb("#FFFFFF")`): Dimmed text color.
+///   - `section-subtitle-size` (length, default: `1em`): Font size for section subtitles.
+///   - `section-subtitle-position` (string, default: `"inside"`): Where to display section subtitles. Options: `"inside"` (within title box with separator), `"below"` (below title box).
 ///   - `code-background` (color, default: `luma(240)`): Background color for inline code.
 ///   - `code-text` (color or none, default: `none`): Text color for inline code.
 ///   - `blocks` (dictionary): Block-specific colors.
@@ -174,6 +199,7 @@
 /// # Slide Structure
 /// The presentation uses standard Typst headings to structure slides:
 /// - Level 1 headings (`= Section`): Creates a dedicated section title slide.
+/// - `#section-slide(title: "Title", subtitle: "Subtitle")`: Creates a section slide with optional subtitle.
 /// - Level 2 headings (`== Slide Title`): Creates a new main slide with title.
 /// - Empty Level 2 headings (`== `): Creates a slide without a title (excluded from ToC).
 /// - Level 3 headings (`=== Subsection`): Creates a slide with title, excluded from ToC.
@@ -288,15 +314,52 @@
     context toc.render-toc(table-of-contents, theme-config, locale)
   }
 
-  show heading.where(level: 1): it => {
-    pagebreak(weak: true)
-    set page(header: none)
-    align(center + horizon, box(
-      fill: theme-config.primary,
-      radius: 15pt, inset: 2em, width: 100%,
-      text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, it.body)
-    ))
+show heading.where(level: 1): it => {
+  pagebreak(weak: true)
+  set page(header: none)
+  let subtitle = none
+  let title-content = it.body
+  if it.body.has("children") {
+    let title-found = false
+    for child in it.body.children {
+      if child.func() == metadata {
+        subtitle = child.value
+      } else if not title-found {
+        title-content = child
+        title-found = true
+      }
+    }
   }
+  let subtitle-position = theme-config.section-subtitle-position
+  align(center + horizon, {
+    if subtitle != none and subtitle-position == "inside" {
+      box(
+        fill: theme-config.primary,
+        radius: 15pt, inset: 2em, width: 100%,
+        [
+          #text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+          #line(length: 50%, stroke: theme-config.sub-text-dimmed + 1pt)
+          #v(0.3em)
+          #text(size: theme-config.section-subtitle-size, weight: "regular", fill: theme-config.sub-text-dimmed, subtitle)
+        ]
+      )
+    } else if subtitle != none and subtitle-position == "below" {
+      box(
+        fill: theme-config.primary,
+        radius: 15pt, inset: 2em, width: 100%,
+        text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+      )
+      v(0.5em)
+      align(center, text(size: theme-config.section-subtitle-size, weight: "regular", fill: theme-config.sub-text-dimmed, subtitle))
+    } else {
+      box(
+        fill: theme-config.primary,
+        radius: 15pt, inset: 2em, width: 100%,
+        text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+      )
+    }
+  })
+}
 
   let render-slide(title) = {
     pagebreak(weak: true)
