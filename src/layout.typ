@@ -17,7 +17,7 @@
   let page-width = page-height * 16 / 10
   let available-width = (page-width / 3) - 2.5cm
   // Temporarily ignore authors for estimation
-  let char-count = 0
+  let char-count = footer.authors.join(", ").len()
 
   let lines = if char-count > 0 {
     calc.ceil(char-count / (available-width / 5.5pt))
@@ -25,7 +25,7 @@
     1
   }
 
-  calc.max(lines * 1em, 1em)
+  calc.max(lines * 0.7em, 1em)
 }
 
 /// Renders the presentation footer with a 3-column layout.
@@ -53,9 +53,9 @@
   let c-authors = if footer.authors != none and footer.authors.len() > 0 {
     text(fill: sub-text)[
       #grid(
-        columns: 2, align: (center+horizon, center+horizon),
+        columns: 2, align: (left+horizon, center+horizon),
         box(width: 100%, align(horizon)[
-          #set par(leading: 0.2em)
+          #set par(leading: 0.2em, justify: false)
           #footer.authors.join(", ")
         ]),
         box(width: 5em, footer.institute)
