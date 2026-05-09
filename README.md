@@ -22,7 +22,7 @@
 Simply import the package in your `.typ` file:
 
 ```typst
-#import "@preview/pepentation:0.2.0": *
+#import "@preview/pepentation:0.2.1": *
 ```
 
 The package will be automatically downloaded on first use.
@@ -33,7 +33,7 @@ If you want to install the package locally or modify it:
 
 1.  **Clone or Download** this repository.
 2.  **Place it** in your local Typst package directory:
-    `{data-dir}/typst/packages/local/pepentation/0.1.0`
+    `{data-dir}/typst/packages/local/pepentation/0.2.1`
 
     Where `{data-dir}` is:
     - **Linux:** `$XDG_DATA_HOME` or `~/.local/share`
@@ -41,7 +41,7 @@ If you want to install the package locally or modify it:
     - **Windows:** `%APPDATA%`
 3.  **Import it** in your `.typ` file:
     ```typst
-    #import "@local/pepentation:0.1.0": *
+    #import "@local/pepentation:0.2.1": *
     ```
     
 ## Quick Start
@@ -55,7 +55,7 @@ Check the **`template/`** folder in this repository. It contains a fully configu
 Initialize the template at the top of your file using the `setup-presentation` rule:
 
 ```typst
-#import "@preview/pepentation:0.2.0": *
+#import "@preview/pepentation:0.2.1": *
 
 #show: setup-presentation.with(
   title-slide: (
@@ -124,7 +124,7 @@ The template provides 9 styled blocks for highlighting specific content:
 - `#failure[content]` (Red) - Failure messages, errors, issues
 
 **Example:**
-```typst
+````typst
 #definition[
   *Euclid's Algorithm*
   An efficient method for computing the GCD.
@@ -147,7 +147,7 @@ The template provides 9 styled blocks for highlighting specific content:
   *Success – Implementation Complete*
   All test cases pass!
 ]
-```
+````
 
 ## Theming System
 
@@ -158,7 +158,7 @@ Pepentation features a comprehensive theming system that allows you to customize
 Import the themes module and use a preset theme:
 
 ```typst
-#import "@local/pepentation:0.2.0": *
+#import "@preview/pepentation:0.2.1": *
 
 #show: setup-presentation.with(
   theme: themes.theme-azure-breeze,
@@ -181,7 +181,7 @@ Import the themes module and use a preset theme:
 You can easily customize any theme by merging it with your own values:
 
 ```typst
-#import "@local/pepentation:0.2.0": *
+#import "@preview/pepentation:0.2.1": *
 
 #show: setup-presentation.with(
   theme: (

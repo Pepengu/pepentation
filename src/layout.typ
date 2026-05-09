@@ -100,23 +100,13 @@
   )
 }
 
-#let _split-circles(section-title, circles, color) = {
+#let split-circles(circles, color, available-width) = {
   if circles.len() == 0 { return (text(fill: color)[],) }
 
-  let title-width = measure(text(fill: color)[#section-title]).width
-  if title-width == 0pt { return (text(fill: color)[#circles.join("")],) }
+  let circle-width = measure(text(fill: color)["•"]).width
+  if circle-width == 0pt { circle-width = 1pt }
 
-  let max-fit = 1
-  for n in range(1, circles.len() + 1) {
-    let s = circles.slice(0, n).join("")
-    if measure(text(fill: color)[#s]).width <= title-width {
-      max-fit = n
-    } else {
-      break
-    }
-  }
-
-  let max-per-line = calc.max(max-fit, 6)
+  let max-per-line = calc.max(calc.floor(available-width / circle-width), 1)
   if circles.len() <= max-per-line {
     return (text(fill: color)[#circles.join("")],)
   }
@@ -158,15 +148,20 @@
     }
     let all-slides = query(selector(heading))
     let headers = ()
-    
+
+    let num-sections = all-slides.filter(s => s.level == 1).len()
+    if num-sections == 0 { num-sections = 1 }
+    let page-width = page.width
+    let base-cell-width = page-width / num-sections
+
     let section = ""
-    let circles = ()  
+    let circles = ()
     let dim-color = theme.sub-text.rgb().transparentize(50%)
     let active-color = theme.sub-text
     let text-color = dim-color
 
-    let make-cell(sec, circ, align-mode, outset-data, col) = {
-      let circle-lines = _split-circles(sec, circ, col)
+    let make-cell(sec, circ, align-mode, outset-data, col, available-width) = {
+      let circle-lines = split-circles(circ, col, available-width)
       box(width: 100%, outset: outset-data)[
         #align(align-mode, grid(
           columns: 1, align: (left, left),
@@ -187,7 +182,7 @@
           outset = (left: 0.5cm, bottom: 0.1cm, top: 0.1cm)
         }
 
-        headers.push(make-cell(section, circles, align-mode, outset, text-color))
+        headers.push(make-cell(section, circles, align-mode, outset, text-color, base-cell-width))
         section = slide.body
         circles = ()
         text-color = dim-color
@@ -207,7 +202,8 @@
     headers.push(make-cell(
       section, circles, right, 
       (right: 0.5cm, bottom: 0.1cm, top: 0.1cm), 
-      text-color
+      text-color,
+      base-cell-width
     ))
 
     grid(columns: headers.len(), ..headers.slice(1))
