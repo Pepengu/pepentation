@@ -146,6 +146,64 @@ the real title is too long to fit the column:
 = Владение и ссылки #metadata((header: "Владение"))
 ```
 
+## Footer Behavior
+
+The footer is a band of three blocks of unequal width, and it never cuts
+information. Every label it is given is typeset in full: if the text does not
+fit, the band grows instead of clipping, and if even a grown band is not enough
+the build fails rather than silently dropping text.
+
+```
++---------------------------------------------------------------------------+
+| Плотников                 |    Что такое Rust     |  СПбГУ  September 2026  3/12 |
++---------------------------------------------------------------------------+
+  40% of the page width      title, 9pt            institute, date and page, 7.5pt
+  names left, institute right
+```
+
+- **The left block is the widest.** It carries two labels instead of one, so it
+  takes `40%` of the page width; the title block takes `35%` and the date and
+  number block `25%`.
+- **Names and institute share the left block.** The authors sit at its left edge
+  and the institute is flush right, each in a column measured to its own text, so
+  neither can squeeze the other out. Both may use two rows: a spelled out
+  institute that is wider than the block wraps beside the names, ragged left,
+  instead of dropping below them.
+- **Two size tiers.** The names and the title are set at `text-size` (`9pt`), the
+  institute, the date and the page number at `secondary-size` (`7.5pt`), so the
+  band does not read as one undifferentiated strip.
+- **Text shrinks before it wraps.** Both tiers shrink in half-point steps down to
+  `min-text-size` (`7pt`) while their labels fit, and only then may a label wrap,
+  so a slightly too long title still gets a single tidy line.
+- **The band grows with the rows it needs.** One row is `line-height` (`13pt`)
+  plus `2pt` of padding above and below, so a single-row footer is a `17pt` band
+  and a two-row footer `30pt`.
+- **The page reserves the worst case.** Typst cannot measure text when it
+  computes a page margin, so the bottom margin always reserves room for
+  `max-lines` (`2`) rows. Every slide therefore keeps its content above the
+  footer, whether this particular slide needs one row or two; on slides that use
+  fewer rows the unused reservation simply shows as page background.
+- **Overflowing `max-lines` is an error, not a truncation.** Compilation stops
+  with a message naming the authors, title and date that did not fit and the
+  three knobs to turn.
+
+All of it is configurable per deck:
+
+```typst
+footer: (
+  enable: true,
+  text-size: 10pt,
+  secondary-size: 8pt,
+  min-text-size: 7pt,
+  line-height: 14pt,
+  max-lines: 3,
+)
+```
+
+Decks whose footer always fits on one row can halve the reservation and get the
+body height back with `max-lines: 1`; each row costs `line-height` of slide
+height on every page.
+
 ## Content Blocks
 
 The template provides 9 styled blocks for highlighting specific content:
@@ -281,6 +339,11 @@ These are the parameters available in the `setup-presentation` function:
 | `footer.authors` | Array of short author names (left side) | `()` |
 | `footer.institute` | Short institute name (left side) | `none` |
 | `footer.date` | Date displayed (right side) | `Today` |
+| `footer.text-size` | Font size of the names and the title | `9pt` |
+| `footer.secondary-size` | Font size of the institute, date and page number | `7.5pt` |
+| `footer.min-text-size` | Smallest size the text is shrunk to before it wraps | `7pt` |
+| `footer.line-height` | Height of one footer row | `13pt` |
+| `footer.max-lines` | Rows the footer may use before the build fails (and the room reserved for it) | `2` |
 | **`theme`** | Dictionary for colors | *(See Theme System above)* |
 | `theme.primary` | Primary brand color (Header/Footer/Title) | `rgb("#003365")` |
 | `theme.secondary` | Secondary accents | `rgb("#00649F")` |

@@ -174,6 +174,18 @@
 ///   - `authors` (array of strings, default: `()`): Array of short author names (left side).
 ///   - `institute` (string or none, default: `none`): Short institute name (left side).
 ///   - `date` (string or content, default: current date): Date displayed (right side).
+///   - `text-size` (length, default: `9pt`): Font size of the names and the title.
+///   - `secondary-size` (length, default: `7.5pt`): Font size of the institute,
+///     the date and the page number, which read as supporting labels.
+///   - `min-text-size` (length, default: `7pt`): Smallest size the text is
+///     shrunk to before it is allowed to wrap onto another row.
+///   - `line-height` (length, default: `13pt`): Height of one footer row. The
+///     colored band is `2 * 2pt + line-height * rows` tall for the rows used.
+///   - `max-lines` (integer, default: `2`): How many rows the footer may use
+///     before compilation fails. The page reserves this much room below the
+///     content for every slide, so a taller footer pushes the body up instead of
+///     covering it. No label is ever cut: if the footer does not fit into
+///     `max-lines` rows, the build fails with a message naming the labels.
 ///
 /// - `theme` (dictionary): Color scheme for the presentation.
 ///   - `primary` (color, default: `rgb("#003365")`): Primary brand color for headers/footers/titles.
@@ -247,7 +259,16 @@
   ), title-slide)
 
   let footer-config = utils.merge-dictionary((
-    enable: false, title: none, institute: none, authors: (), date: utils.today(locale)
+    enable: false,
+    title: none,
+    institute: none,
+    authors: (),
+    date: utils.today(locale),
+    text-size: layout.footer-text-size,
+    secondary-size: layout.footer-secondary-size,
+    min-text-size: layout.footer-min-text-size,
+    line-height: layout.footer-line-height,
+    max-lines: layout.footer-max-lines,
   ), footer)
   // Ensure authors is always an array
   if footer-config.authors == none {
@@ -260,15 +281,24 @@
   theme-state.update(theme-config)
 
   let page-width = height * 16 / 10
-  let footer-h = layout.estimate-footer-height(footer-config, theme-config, height)
+  // The reservation is the height of the tallest band the configuration allows,
+  // not of the band this footer ends up needing: a page margin cannot depend on
+  // measured text, and a footer that outgrew the margin would cover slide
+  // content instead of pushing it up. A footer that fits into fewer rows than
+  // that leaves the rest of the margin empty above the band.
+  let footer-h = layout.footer-reserved-height(footer-config)
   // Absolute on purpose: an `em` here would be relative to the default text
   // size, while the body text below is set to 14pt, and the header needs to do
   // exact arithmetic with the page margins.
   let page-margin = 11pt
-  let bottom-margin = if footer-config.enable { footer-h + 1em } else { 0em }
+  // The margin only has to keep the band off the content, and `footer-gap` is a
+  // length instead of an `em` to stay on the same scale as the band.
+  let bottom-margin = if footer-config.enable { footer-h + layout.footer-gap } else { 0pt }
 
-  let footer-content = align(bottom,
-    box(width: 100%, layout.create-footer(footer-config, theme-config, page-width, footer-h))
+  // Centred: the band is as wide as the page, so centring it is what makes it
+  // reach both page edges, exactly like the navigation header.
+  let footer-content = align(bottom + center,
+    layout.create-footer(footer-config, theme-config, page-width)
   )
 
   set page(
@@ -278,6 +308,8 @@
     margin: (top: 0em, right: page-margin, left: page-margin, bottom: bottom-margin),
     header: none,
     footer: footer-content,
+    // The band is meant to sit on the bottom edge of the page.
+    footer-descent: 0pt,
   )
 
   set text(size: 14pt, fill: theme-config.main-text)
