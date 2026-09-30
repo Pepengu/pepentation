@@ -329,30 +329,64 @@ show heading.where(level: 1): it => {
   let subtitle = parts.subtitle
   let subtitle-position = theme-config.section-subtitle-position
   align(center + horizon, {
+    // A title and a subtitle read as labels, so they are neither hyphenated nor
+    // justified. Turning justification off also lets a title that runs over two
+    // lines centre itself instead of being stretched.
+    set par(justify: false)
     if subtitle != none and subtitle-position == "inside" {
       box(
         fill: theme-config.primary,
         radius: 15pt, inset: 2em, width: 100%,
         [
-          #text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+          #text(
+            size: 2.2em,
+            weight: "bold",
+            fill: theme-config.sub-text,
+            hyphenate: false,
+            title-content,
+          )
           #line(length: 50%, stroke: theme-config.sub-text-dimmed + 1pt)
           #v(0.3em)
-          #text(size: theme-config.section-subtitle-size, weight: "regular", fill: theme-config.sub-text-dimmed, subtitle)
+          #text(
+            size: theme-config.section-subtitle-size,
+            weight: "regular",
+            fill: theme-config.sub-text-dimmed,
+            hyphenate: false,
+            subtitle,
+          )
         ]
       )
     } else if subtitle != none and subtitle-position == "below" {
       box(
         fill: theme-config.primary,
         radius: 15pt, inset: 2em, width: 100%,
-        text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+        text(
+          size: 2.2em,
+          weight: "bold",
+          fill: theme-config.sub-text,
+          hyphenate: false,
+          title-content,
+        )
       )
       v(0.5em)
-      align(center, text(size: theme-config.section-subtitle-size, weight: "regular", fill: theme-config.sub-text-dimmed, subtitle))
+      align(center, text(
+        size: theme-config.section-subtitle-size,
+        weight: "regular",
+        fill: theme-config.sub-text-dimmed,
+        hyphenate: false,
+        subtitle,
+      ))
     } else {
       box(
         fill: theme-config.primary,
         radius: 15pt, inset: 2em, width: 100%,
-        text(size: 2.2em, weight: "bold", fill: theme-config.sub-text, title-content)
+        text(
+          size: 2.2em,
+          weight: "bold",
+          fill: theme-config.sub-text,
+          hyphenate: false,
+          title-content,
+        )
       )
     }
   })
