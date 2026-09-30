@@ -99,6 +99,28 @@ This slide has no title.
 This slide has a title, but won't appear in the outline.
 ```
 
+A section heading can also carry `metadata`, which never shows up as text:
+`metadata("…")` sets the subtitle of the section slide, and
+`metadata((header: "…"))` additionally sets a shorter label for the header
+(see [Header Behavior](#header-behavior)). The `header`, `subtitle` and
+`section-slide` keys are read from such a dictionary; any other key is ignored.
+The section slide and the table of contents use the full title, falling back to
+the header label for a section that has no visible title.
+
+```typst
+= Cargo и компилятор #metadata((header: "Cargo", subtitle: "17 минут"))
+```
+
+A section that should be part of the header and the table of contents without
+taking a slide of its own opts out with `section-slide: false`. Leaving the title
+out of the heading keeps the visible title empty, so the header label is all the
+reader sees:
+
+```typst
+= #metadata((header: "Владение", section-slide: false))
+== Слайды раздела
+```
+
 ## Table of Contents Styles
 
 Pepentation offers two different styles for the table of contents:

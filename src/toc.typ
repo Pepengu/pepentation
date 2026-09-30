@@ -4,6 +4,23 @@
 /// for presentations, supporting both detailed (multi-column with subheadings)
 /// and simple (grid-based) layouts.
 
+#import "utils.typ": heading-title, plain-text
+
+/// The text a table of contents entry shows for a heading body, or `none` when
+/// the heading has no text to show at all.
+///
+/// A heading without a visible title carries its text in the metadata instead,
+/// so the header label is used as a fallback. Titles that do render text are
+/// passed through untouched, which keeps their formatting.
+#let entry-label(body) = {
+  if plain-text(body).trim() != "" {
+    body
+  } else {
+    let label = heading-title(body)
+    if label.trim() == "" { none } else { label }
+  }
+}
+
 /// Renders the table of contents title based on the locale.
 ///
 /// # Parameters
@@ -38,7 +55,7 @@
 /// Content for the detailed table of contents.
 #let detailed-style(theme-config) = {
   show outline.entry.where(level: 1): it => {
-    if it.element.body == [] {
+    if entry-label(it.element.body) == none {
       none
     } else {
       context {
@@ -53,7 +70,7 @@
             link(it.element.location(), grid(
               columns: (1fr, auto),
               align: (left, right),
-              text(size: 1.2em, weight: "bold", fill: theme-config.toc-text, hyphenate: true)[#counter(heading).at(it.element.location()).first(). #it.element.body],
+              text(size: 1.2em, weight: "bold", fill: theme-config.toc-text, hyphenate: true)[#counter(heading).at(it.element.location()).first(). #entry-label(it.element.body)],
               text(size: 0.9em, fill: theme-config.toc-text.lighten(30%))[#slide-num]
             ))
           )
@@ -105,7 +122,7 @@
     let grid-items = ()
 
     for entry in entries {
-      if entry.body != [] {
+      if entry-label(entry.body) != none {
         let slide-num = counter(page).at(entry.location()).first()
         grid-items.push(
           box(
@@ -117,7 +134,7 @@
             link(entry.location(), grid(
               columns: (1fr, auto),
               align: (left, right),
-              text(size: 1.3em, weight: "bold", fill: theme-config.toc-text, hyphenate: true)[#counter(heading).at(entry.location()).first(). #entry.body],
+              text(size: 1.3em, weight: "bold", fill: theme-config.toc-text, hyphenate: true)[#counter(heading).at(entry.location()).first(). #entry-label(entry.body)],
               text(size: 1.0em, fill: theme-config.toc-text.lighten(30%))[#slide-num]
             ))
           )

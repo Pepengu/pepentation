@@ -315,21 +315,18 @@
   }
 
 show heading.where(level: 1): it => {
+  // Read before the page break, because a section that opts out of its slide
+  // must not break the page or suppress the header either.
+  let parts = utils.heading-parts(it.body)
+  if parts.section-slide == false {
+    // Structural only: the heading still numbers, still appears in the table of
+    // contents and still owns the slides below it.
+    return none
+  }
   pagebreak(weak: true)
   set page(header: none)
-  let subtitle = none
-  let title-content = it.body
-  if it.body.has("children") {
-    let title-found = false
-    for child in it.body.children {
-      if child.func() == metadata {
-        subtitle = child.value
-      } else if not title-found {
-        title-content = child
-        title-found = true
-      }
-    }
-  }
+  let title-content = parts.title
+  let subtitle = parts.subtitle
   let subtitle-position = theme-config.section-subtitle-position
   align(center + horizon, {
     if subtitle != none and subtitle-position == "inside" {
