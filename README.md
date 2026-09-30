@@ -6,7 +6,7 @@
 
 **Features:**
 - 🎨 **Comprehensive Theming:** Extensive theme system with preset themes and easy customization.
-- 🧭 **Navigation:** Header with bullet-point progress tracker and interactive table of contents (Beamer-inspired).
+- 🧭 **Navigation:** Header with bullet-point progress tracker and interactive table of contents (Beamer-inspired). The header always occupies a bounded amount of space, no matter how long your deck is: section titles are fitted into at most two lines, and trackers are capped at three rows of dots.
 - 🔢 **Smart Layout:** Automatic footer with 3-column layout (Authors, Title, Date/Page).
 - 🧱 **Rich Content Blocks:** 9 styled block types for definitions, warnings, remarks, hints, info, examples, quotes, success, and failure messages.
 - 🌈 **Theme Presets:** Multiple beautiful themes including light and dark variants.
@@ -130,6 +130,21 @@ Pepentation offers two different styles for the table of contents:
 - **`"simple"`**: A clean 2-column grid layout displaying only section titles (level 1 headings) in styled boxes. This provides a simpler, more spacious overview of your presentation structure.
 
 - **`"none"`**: Disables the table of contents entirely.
+
+## Header Behavior
+
+The header is a navigation aid, not a content area, so it never grows past a fixed budget. This keeps your slide body in the same place on every page:
+
+- **Section titles** are typeset at the full header size and shrunk (down to `9pt`) until the title fits on at most two lines. Longer titles are truncated with an ellipsis, so a verbose section name never pushes the slide body down.
+- **Progress trackers** show one dot per slide in the section, filled row by row up to three rows per section. A section that overflows those three rows is compacted: while at most a quarter of its slides are dropped, the shown dots are kept and a trailing `…` marks the remainder; beyond that, the slides are bucketed evenly, so each dot covers roughly the same number of slides.
+- **Section titles are left-aligned**, one column per section, separated by a small gap, so the header reads as a single list from the left margin onwards.
+
+A section can also replace the text the header shows for it, which is useful when
+the real title is too long to fit the column:
+
+```typst
+= Владение и ссылки #metadata((header: "Владение"))
+```
 
 ## Content Blocks
 

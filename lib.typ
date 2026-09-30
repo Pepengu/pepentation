@@ -261,6 +261,10 @@
 
   let page-width = height * 16 / 10
   let footer-h = layout.estimate-footer-height(footer-config, theme-config, height)
+  // Absolute on purpose: an `em` here would be relative to the default text
+  // size, while the body text below is set to 14pt, and the header needs to do
+  // exact arithmetic with the page margins.
+  let page-margin = 11pt
   let bottom-margin = if footer-config.enable { footer-h + 1em } else { 0em }
 
   let footer-content = align(bottom,
@@ -271,7 +275,7 @@
     width: page-width,
     height: height,
     fill: theme-config.background,
-    margin: (top: 0em, right: 1em, left: 1em, bottom: bottom-margin),
+    margin: (top: 0em, right: page-margin, left: page-margin, bottom: bottom-margin),
     header: none,
     footer: footer-content,
   )
@@ -399,7 +403,7 @@ show heading.where(level: 1): it => {
         width: 100%,
         outset: (left: 2em, right: 2em, top: 1em, bottom: 0.2em),
         fill: theme-config.primary,
-        layout.create-header(theme-config)
+        layout.create-header(theme-config, page-width - page-margin * 2)
       ))
     }
 
