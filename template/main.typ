@@ -1,4 +1,4 @@
-#import "../lib.typ": *
+#import "@preview/pepentation:0.3.0": *
 
 #show: setup-presentation.with(
   title-slide: (

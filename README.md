@@ -295,6 +295,8 @@ You can easily customize any theme by merging it with your own values:
 You can create your own theme by defining a dictionary with all theme properties:
 
 ```typst
+#import "@preview/pepentation:0.3.0": *
+
 #let my-custom-theme = (
   primary: rgb("#003365"),
   secondary: rgb("#00649F"),
