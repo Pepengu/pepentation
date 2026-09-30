@@ -6,7 +6,6 @@
 /// # Usage
 /// ```typ
 /// #import "@preview/pepentation:0.3.0": *
-/// #import "@preview/pepentation:0.3.0/themes": themes
 ///
 /// #show: setup-presentation.with(
 ///   theme: themes.theme-azure-breeze
@@ -25,24 +24,6 @@
 /// - `section-subtitle-size`: Font size for section subtitles (default: `1em`).
 /// - `section-subtitle-position`: Where to display section subtitles. Options: `"inside"` (within title box with separator line), `"below"` (below title box). Default: `"inside"`.
 ///
-/// # Usage
-/// ```typ
-/// #import "@local/pepentation:0.3.0": *
-/// #import "@local/pepentation:0.3.0/themes": themes
-///
-/// #show: setup-presentation.with(
-///   theme: themes.theme-azure-breeze
-/// )
-/// ```
-///
-/// # Customization
-/// You can easily customize themes by merging:
-/// ```typ
-/// #show: setup-presentation.with(
-///   theme: (..themes.theme-azure-breeze, primary: rgb("#FF0000"))
-/// )
-/// ```
-
 /// Default theme structure with all available options.
 #let default-theme = (
   primary: rgb("#003365"),
