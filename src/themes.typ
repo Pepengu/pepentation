@@ -5,8 +5,8 @@
 ///
 /// # Usage
 /// ```typ
-/// #import "@preview/pepentation:0.2.1": *
-/// #import "@preview/pepentation:0.2.1/themes": themes
+/// #import "@preview/pepentation:0.3.0": *
+/// #import "@preview/pepentation:0.3.0/themes": themes
 ///
 /// #show: setup-presentation.with(
 ///   theme: themes.theme-azure-breeze
@@ -27,8 +27,8 @@
 ///
 /// # Usage
 /// ```typ
-/// #import "@local/pepentation:0.2.1": *
-/// #import "@local/pepentation:0.2.1/themes": themes
+/// #import "@local/pepentation:0.3.0": *
+/// #import "@local/pepentation:0.3.0/themes": themes
 ///
 /// #show: setup-presentation.with(
 ///   theme: themes.theme-azure-breeze
